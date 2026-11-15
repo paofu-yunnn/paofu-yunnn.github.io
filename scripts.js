@@ -208,7 +208,7 @@ const WORKS = [
 本回合無變動。
 ━━━━━━━━`,
     authorNote: "作者的話（待補）",
-    screenshots: []  // 若要放試玩截圖，把圖檔放到 assets/screenshots/，再寫上檔名，例如 ["playtest-01.jpg"]
+    screenshots: ["fengpi-playtest-01.png", "fengpi-playtest-02.png", "fengpi-playtest-03.png"]
   },
   {
     id: "kuaichuan001",
