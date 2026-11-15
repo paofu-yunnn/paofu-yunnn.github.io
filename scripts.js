@@ -208,7 +208,8 @@ const WORKS = [
 本回合無變動。
 ━━━━━━━━`,
     authorNote: "柊司這個人太欠嗆了，皮夾的照片跟手上的錶真的讓人很氣🤬",
-    screenshots: ["fengpi-playtest-01.PNG", "fengpi-playtest-02.PNG", "fengpi-playtest-03.PNG"]
+    screenshots: ["fengpi-playtest-01.PNG", "fengpi-playtest-02.PNG", "fengpi-playtest-03.PNG"],
+    chatLink: "https://web.lunly.app/community/8235da50f24e"
   },
   {
     id: "kuaichuan001",
