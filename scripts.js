@@ -317,7 +317,7 @@ const WORKS = [
     ],
     opening: "開場白（待補）",
     authorNote: "作者的話（待補）",
-    screenshots: [],  // 若要放試玩截圖，把圖檔放到 assets/screenshots/，再寫上檔名，例如 ["playtest-01.jpg"]
+    screenshots: ["Fasttravel-002-01.PNG", "Fasttravel-002-02.PNG", "Fasttravel-002-03.PNG"],  // 若要放試玩截圖，把圖檔放到 assets/screenshots/，再寫上檔名，例如 ["playtest-01.jpg"]
     chatLink: "https://web.lunly.app/community/bf60a15a835f"
   },
   {
