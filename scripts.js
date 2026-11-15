@@ -316,8 +316,9 @@ const WORKS = [
       { name: "角色名稱（待補）", image: "", desc: "角色介紹（待補）" }
     ],
     opening: "開場白（待補）",
-    authorNote: "作者的話（待補）",
-    screenshots: ["Fasttravel-002-01.PNG", "Fasttravel-002-02.PNG", "Fasttravel-002-03.PNG"],  // 若要放試玩截圖，把圖檔放到 assets/screenshots/，再寫上檔名，例如 ["playtest-01.jpg"]
+    authorNote: `50個世界完全隨機開局，我也不知道你會抽到誰🤔
+    這是我在霓虹夜店女DJ的安可曲🚗開車的截圖`,
+    screenshots: ["Fasttravel-002-01.PNG", "Fasttravel-002-02.PNG", "Fasttravel-002-03.PNG"],
     chatLink: "https://web.lunly.app/community/bf60a15a835f"
   },
   {
