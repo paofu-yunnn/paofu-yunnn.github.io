@@ -564,8 +564,11 @@ function scrollActiveFilterChip() {
   if (!dock.classList.contains("is-stuck") || dock.classList.contains("is-open")) return;
   const on = filtersEl.querySelector(".chip.is-on");
   if (!on) return;
-  const target = on.offsetLeft - (filtersEl.clientWidth - on.offsetWidth) / 2;
-  filtersEl.scrollTo({ left: Math.max(0, target), behavior: "smooth" });
+  const left = on.offsetLeft, right = left + on.offsetWidth;
+  const viewL = filtersEl.scrollLeft, viewR = viewL + filtersEl.clientWidth;
+  if (left >= viewL && right <= viewR) return; // 已經看得到就不要動
+  const target = left < viewL ? left - 8 : right - filtersEl.clientWidth + 8;
+  filtersEl.scrollTo({ left: Math.max(0, target), behavior: "auto" });
 }
 
 function renderFilterChips() {
