@@ -208,7 +208,7 @@ const WORKS = [
 本回合無變動。
 ━━━━━━━━`,
     authorNote: "作者的話（待補）",
-    screenshots: ["fengpi-playtest-01.png", "fengpi-playtest-02.png", "fengpi-playtest-03.png"]
+    screenshots: ["fengpi-playtest-01.PNG", "fengpi-playtest-02.PNG", "fengpi-playtest-03.PNG"]
   },
   {
     id: "kuaichuan001",
