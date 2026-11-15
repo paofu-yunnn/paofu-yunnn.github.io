@@ -134,16 +134,93 @@
     }
     #characters .section-head { padding-top: 24px; }
 
+    .filter-sentinel {
+      height: 1px;
+      margin-bottom: -1px;
+      pointer-events: none;
+      visibility: hidden;
+    }
+    .filter-dock {
+      position: sticky;
+      top: 0;
+      z-index: 8;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 24px 0 22px;
+    }
+    .filter-dock::before {
+      content: "";
+      position: absolute;
+      inset: 0 calc(50% - 50vw);
+      z-index: -1;
+      pointer-events: none;
+      background: linear-gradient(180deg, rgba(7,8,12,.96) 70%, rgba(7,8,12,0));
+    }
+    .filter-dock.is-stuck {
+      padding-top: max(10px, env(safe-area-inset-top, 0px));
+      padding-bottom: 10px;
+    }
+    .filter-dock.is-stuck::before {
+      background: rgba(7, 8, 12, .94);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--line);
+      box-shadow: 0 12px 28px rgba(0,0,0,.4);
+    }
     .toolbar {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      padding: 24px 0 12px;
-      position: sticky;
-      top: 0;
-      z-index: 5;
-      background: linear-gradient(180deg, rgba(7,8,12,.96) 70%, rgba(7,8,12,0));
-      padding-bottom: 22px;
+      flex: 1;
+      min-width: 0;
+      position: relative;
+    }
+    .filter-dock.is-stuck:not(.is-open) .toolbar {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-x: contain;
+    }
+    .filter-dock.is-stuck:not(.is-open) .toolbar::-webkit-scrollbar {
+      display: none;
+      width: 0;
+      height: 0;
+    }
+    .filter-dock.is-stuck:not(.is-open) .chip {
+      flex: 0 0 auto;
+    }
+    .filter-toggle {
+      display: none;
+      flex: 0 0 auto;
+      appearance: none;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: .12em;
+      color: var(--gold);
+      border: 1px solid var(--gold);
+      background: rgba(16, 22, 35, .92);
+      border-radius: 999px;
+      padding: 6px 12px;
+      line-height: 1.4;
+      cursor: pointer;
+      white-space: nowrap;
+      align-self: flex-start;
+    }
+    .filter-dock.is-stuck .filter-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .filter-toggle:hover,
+    .filter-toggle:focus-visible {
+      background: rgba(201,168,76,.2);
+      color: var(--gold-soft);
+      outline: none;
     }
     .chip {
       border: 1px solid var(--line);
@@ -379,7 +456,11 @@
       </nav>
     </header>
 
-    <div class="toolbar" id="filters" aria-label="分類篩選"></div>
+    <div class="filter-sentinel" id="filterSentinel" aria-hidden="true"></div>
+    <div class="filter-dock" id="filterDock">
+      <div class="toolbar" id="filters" role="toolbar" aria-label="分類篩選"></div>
+      <button type="button" class="filter-toggle" id="filterToggle" aria-expanded="false" aria-controls="filters">展開</button>
+    </div>
 
     <section id="scripts">
       <div class="section-head">
@@ -474,6 +555,16 @@ function collectFilterNames() {
   return names;
 }
 
+function scrollActiveFilterChip() {
+  const dock = document.getElementById("filterDock");
+  if (!dock || !filtersEl) return;
+  if (!dock.classList.contains("is-stuck") || dock.classList.contains("is-open")) return;
+  const on = filtersEl.querySelector(".chip.is-on");
+  if (!on) return;
+  const target = on.offsetLeft - (filtersEl.clientWidth - on.offsetWidth) / 2;
+  filtersEl.scrollTo({ left: Math.max(0, target), behavior: "smooth" });
+}
+
 function renderFilterChips() {
   if (!filtersEl) return;
   filtersEl.innerHTML = "";
@@ -486,6 +577,7 @@ function renderFilterChips() {
     b.addEventListener("click", () => applyFilter(name));
     filtersEl.appendChild(b);
   });
+  scrollActiveFilterChip();
 }
 
 function matchesFilter(item) {
@@ -577,6 +669,44 @@ if (countEl) countEl.textContent = String((WORKS || []).length);
 if (charCountEl) charCountEl.textContent = String((CHARACTERS || []).length);
 render();
 renderCharacters();
+
+(function setupStickyFilter() {
+  const dock = document.getElementById("filterDock");
+  const sentinel = document.getElementById("filterSentinel");
+  const toggle = document.getElementById("filterToggle");
+  if (!dock || !sentinel || !toggle) return;
+
+  const syncToggle = () => {
+    const open = dock.classList.contains("is-open");
+    toggle.textContent = open ? "收起" : "展開";
+    toggle.setAttribute("aria-expanded", open ? "true" : "false");
+  };
+
+  const setStuck = (stuck) => {
+    if (!stuck) dock.classList.remove("is-open");
+    dock.classList.toggle("is-stuck", stuck);
+    syncToggle();
+    if (stuck) requestAnimationFrame(scrollActiveFilterChip);
+  };
+
+  if ("IntersectionObserver" in window) {
+    const io = new IntersectionObserver((entries) => {
+      setStuck(!entries[0].isIntersecting);
+    }, { threshold: 0 });
+    io.observe(sentinel);
+  } else {
+    const onScroll = () => setStuck(sentinel.getBoundingClientRect().top < 0);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+  }
+
+  toggle.addEventListener("click", () => {
+    if (!dock.classList.contains("is-stuck")) return;
+    dock.classList.toggle("is-open");
+    syncToggle();
+    if (!dock.classList.contains("is-open")) requestAnimationFrame(scrollActiveFilterChip);
+  });
+})();
 </script>
 
   <button type="button" class="back-to-top" id="backToTop" aria-label="回到頂端" hidden>
