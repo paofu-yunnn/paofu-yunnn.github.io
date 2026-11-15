@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>泡芙🐈藏書室</title>
+  <meta name="description" content="泡芙的文字角色扮演劇本與角色卡。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600&family=Noto+Serif+TC:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #07080c;
+      --bg-2: #0d1118;
+      --navy: #141a28;
+      --navy-2: #1b2336;
+      --gold: #c9a84c;
+      --gold-soft: #e8d5a3;
+      --gold-dim: rgba(201, 168, 76, .22);
+      --text: #efe8d8;
+      --muted: #9a9283;
+      --line: rgba(232, 213, 163, .16);
+      --card: #121826;
+      --shadow: 0 18px 50px rgba(0,0,0,.45);
+      --radius: 18px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      background:
+        radial-gradient(1200px 600px at 80% -10%, rgba(201,168,76,.08), transparent 55%),
+        radial-gradient(900px 500px at -10% 20%, rgba(40,60,110,.18), transparent 50%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+    a { color: inherit; }
+    .wrap { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
+
+    header.hero {
+      padding: 72px 0 48px;
+      border-bottom: 1px solid var(--line);
+      position: relative;
+    }
+    .kicker {
+      color: var(--gold);
+      letter-spacing: .28em;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 18px;
+    }
+    .hero h1 {
+      font-family: "Noto Serif TC", "Songti TC", serif;
+      font-weight: 700;
+      font-size: clamp(36px, 6vw, 64px);
+      letter-spacing: .08em;
+      line-height: 1.15;
+    }
+    .hero h1 span {
+      display: block;
+      font-size: .38em;
+      font-weight: 500;
+      letter-spacing: .22em;
+      color: var(--gold-soft);
+      margin-top: 12px;
+      opacity: .9;
+    }
+    .ornament {
+      width: 72px;
+      height: 1px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+      margin: 28px 0 24px;
+    }
+    .hero p.lead {
+      max-width: 38em;
+      color: var(--muted);
+      font-size: 16px;
+    }
+    .stats {
+      display: flex;
+      gap: 28px;
+      margin-top: 32px;
+      color: var(--gold-soft);
+      font-size: 13px;
+      letter-spacing: .08em;
+    }
+    .stats b {
+      font-family: "Noto Serif TC", serif;
+      font-size: 22px;
+      color: var(--text);
+      display: block;
+      letter-spacing: 0;
+    }
+    .site-nav {
+      display: flex;
+      gap: 10px;
+      margin-top: 28px;
+    }
+    .site-nav a {
+      text-decoration: none;
+      border: 1px solid var(--line);
+      background: rgba(20,26,40,.7);
+      color: var(--gold-soft);
+      border-radius: 999px;
+      padding: 6px 16px;
+      font-size: 13px;
+      letter-spacing: .12em;
+      transition: .2s ease;
+    }
+    .site-nav a:hover, .site-nav a:focus-visible {
+      border-color: var(--gold);
+      background: rgba(201,168,76,.12);
+      outline: none;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 56px 0 8px;
+    }
+    .section-head h2 {
+      font-family: "Noto Serif TC", serif;
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: .16em;
+    }
+    .section-head .hint {
+      color: var(--muted);
+      font-size: 13px;
+    }
+    #characters .section-head { padding-top: 24px; }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 20px 0 8px;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      background: linear-gradient(180deg, rgba(7,8,12,.96) 70%, rgba(7,8,12,0));
+      padding-bottom: 22px;
+    }
+    .chip {
+      border: 1px solid var(--line);
+      background: rgba(20,26,40,.7);
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+    .chip:hover, .chip.is-on {
+      border-color: var(--gold);
+      color: var(--gold-soft);
+      background: rgba(201,168,76,.12);
+    }
+
+    .grid, .char-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+      padding: 8px 0 64px;
+    }
+    @media (max-width: 900px) {
+      .grid, .char-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    }
+    @media (max-width: 620px) {
+      .wrap { width: min(1180px, calc(100% - 28px)); }
+      .grid { grid-template-columns: 1fr; }
+      .char-grid { grid-template-columns: repeat(2, 1fr); }
+      header.hero { padding: 48px 0 32px; }
+      .section-head h2 { font-size: 24px; }
+    }
+
+    .card {
+      background: linear-gradient(180deg, var(--navy-2), var(--card));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+      color: inherit;
+      width: 100%;
+      font: inherit;
+    }
+    .card:hover, .card:focus-visible {
+      transform: translateY(-4px);
+      border-color: rgba(201,168,76,.45);
+      box-shadow: 0 22px 50px rgba(0,0,0,.55), 0 0 0 1px rgba(201,168,76,.15);
+      outline: none;
+    }
+    .cover-frame, .portrait-frame {
+      width: 100%;
+      background: #0a0e16;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .cover-frame { aspect-ratio: 16 / 9; }
+    .portrait-frame { aspect-ratio: 3 / 4; }
+    .cover-frame img, .portrait-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+      display: block;
+    }
+    .ph, .ph-portrait {
+      width: 100%;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(201,168,76,.16), transparent 50%),
+        linear-gradient(160deg, #161c2c, #0b0e16 70%);
+      position: relative;
+      overflow: hidden;
+    }
+    .ph { aspect-ratio: 16 / 9; }
+    .ph-portrait { aspect-ratio: 3 / 4; }
+    .ph::before, .ph-portrait::before {
+      content: "";
+      position: absolute;
+      inset: 14px;
+      border: 1px solid var(--gold-dim);
+      border-radius: 8px;
+    }
+    .ph-mark {
+      font-family: "Noto Serif TC", serif;
+      color: var(--gold);
+      letter-spacing: .2em;
+      font-size: 13px;
+      opacity: .85;
+      z-index: 1;
+      text-align: center;
+      padding: 0 12px;
+    }
+    .body { padding: 18px 18px 20px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tag {
+      font-size: 11px;
+      letter-spacing: .04em;
+      color: var(--gold-soft);
+      border: 1px solid var(--gold-dim);
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(201,168,76,.06);
+    }
+    .body h2, .body h3 {
+      font-family: "Noto Serif TC", serif;
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: .04em;
+      line-height: 1.4;
+    }
+    .subtitle {
+      color: var(--gold-soft);
+      font-size: 12px;
+      letter-spacing: .08em;
+      margin-top: -6px;
+    }
+    .body p {
+      color: var(--muted);
+      font-size: 13.5px;
+      line-height: 1.75;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .more {
+      margin-top: auto;
+      color: var(--gold);
+      font-size: 12px;
+      letter-spacing: .12em;
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 32px 0 48px;
+      color: var(--muted);
+      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    footer .credit {
+      color: var(--gold-soft);
+      letter-spacing: .08em;
+    }
+    footer a { color: var(--gold); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    dialog.modal {
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: #101623;
+      color: var(--text);
+      width: min(820px, calc(100% - 28px));
+      max-height: 92vh;
+      overflow: auto;
+      padding: 0;
+      box-shadow: var(--shadow);
+    }
+    dialog.modal::backdrop { background: rgba(4,5,9,.78); }
+    #modalMedia .cover-frame { border-radius: 0; }
+    .modal-ph { width: 100%; }
+    .modal-body { padding: 24px 26px 28px; }
+    .modal-body h2 {
+      font-family: "Noto Serif TC", serif;
+      font-size: 26px;
+      line-height: 1.35;
+      letter-spacing: .06em;
+      margin: 8px 0 14px;
+    }
+    .modal-body .long { color: #d8d0c0; font-size: 15px; }
+    .meta {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      background: rgba(7,8,12,.6);
+      color: var(--gold-soft);
+      cursor: pointer;
+      font-size: 20px;
+      line-height: 1;
+      z-index: 2;
+    }
+    .dialog-inner { position: relative; }
+    .dialog-inner.is-char {
+      display: block;
+    }
+    @media (min-width: 720px) {
+      .dialog-inner.is-char {
+        display: grid;
+        grid-template-columns: minmax(220px, 280px) 1fr;
+        align-items: stretch;
+      }
+      .dialog-inner.is-char #modalMedia .portrait-frame,
+      .dialog-inner.is-char #modalMedia .ph-portrait {
+        height: 100%;
+        min-height: 360px;
+        aspect-ratio: auto;
+      }
+      .dialog-inner.is-char .modal-body { padding-left: 8px; }
+    }
+    @media (max-width: 719px) {
+      #modalMedia.is-portrait .portrait-frame,
+      #modalMedia.is-portrait .ph-portrait {
+        max-height: 52vh;
+        margin: 0 auto;
+        width: min(100%, calc(52vh * 3 / 4));
+      }
+    }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <div class="kicker">劇本　・　角色卡</div>
+      <h1>泡芙🐈藏書室<span>文字角色扮演　戀愛模擬器模板</span></h1>
+      <div class="ornament"></div>
+      <p class="lead">這裡收藏泡芙寫的文字角色扮演劇本，還有可以單獨遊玩的角色卡。點進卡片就能看簡介與封面。</p>
+      <div class="stats">
+        <div><b id="count">0</b>部劇本</div>
+        <div><b id="charCount">0</b>張角色卡</div>
+      </div>
+      <nav class="site-nav" aria-label="頁面導覽">
+        <a href="#scripts">劇本</a>
+        <a href="#characters">角色卡</a>
+      </nav>
+    </header>
+
+    <section id="scripts">
+      <div class="section-head">
+        <h2>劇本</h2>
+        <div class="hint">點進卡片即可查看詳情頁</div>
+      </div>
+      <div class="toolbar" id="filters" aria-label="分類篩選"></div>
+      <div class="grid" id="grid" aria-label="劇本列表"></div>
+    </section>
+
+    <section id="characters">
+      <div class="section-head">
+        <h2>角色卡</h2>
+        <div class="hint">直式肖像以 3:4 完整顯示，不會裁切</div>
+      </div>
+      <div class="char-grid" id="charGrid" aria-label="角色卡列表"></div>
+    </section>
+
+    <footer>
+      <div class="credit">泡芙Yunnn.cc</div>
+      <div>有問題歡迎到 <a href="https://discord.gg/wNgvn5wBC" target="_blank" rel="noopener">Lunly 的 Discord 社群</a> 找我，直接 @泡芙Yunnn</div>
+    </footer>
+  </div>
+
+  <dialog class="modal" id="modal">
+    <div class="dialog-inner" id="dialogInner">
+      <button class="close" type="button" aria-label="關閉" id="closeBtn">×</button>
+      <div id="modalMedia"></div>
+      <div class="modal-body">
+        <div class="tags" id="modalTags"></div>
+        <h2 id="modalTitle"></h2>
+        <p class="long" id="modalLong"></p>
+        <p class="meta" id="modalMeta"></p>
+      </div>
+    </div>
+  </dialog>
+
+<script src="scripts.js"></script>
+<script>
+const COVER_DIR = "assets/covers/";
+const PORTRAIT_DIR = "assets/portraits/";
+
+const grid = document.getElementById("grid");
+const charGrid = document.getElementById("charGrid");
+const filtersEl = document.getElementById("filters");
+const modal = document.getElementById("modal");
+const dialogInner = document.getElementById("dialogInner");
+const modalMedia = document.getElementById("modalMedia");
+const countEl = document.getElementById("count");
+const charCountEl = document.getElementById("charCount");
+let current = "全部";
+
+function workKey(w, i) {
+  return String(w.id || (i + 1)).padStart(2, "0");
+}
+
+function coverSrc(w) {
+  const name = (w.cover || "").trim();
+  return name ? COVER_DIR + name : "";
+}
+
+function portraitSrc(c) {
+  const name = (c.portrait || "").trim();
+  return name ? PORTRAIT_DIR + name : "";
+}
+
+function coverHTML(w, i) {
+  const no = workKey(w, i);
+  const src = coverSrc(w);
+  if (src) {
+    return `<div class="cover-frame"><img src="${src}" alt="《${escapeHTML(w.title)}》封面"></div>`;
+  }
+  return `<div class="ph"><div class="ph-mark">NO. ${no}　封面待補</div></div>`;
+}
+
+function portraitHTML(c) {
+  const src = portraitSrc(c);
+  if (src) {
+    return `<div class="portrait-frame"><img src="${src}" alt="${escapeHTML(c.title)} 肖像"></div>`;
+  }
+  return `<div class="ph-portrait"><div class="ph-mark">肖像待補</div></div>`;
+}
+
+function escapeHTML(s) {
+  return String(s || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function tagHTML(tags, withHash) {
+  return (tags || []).map(t => {
+    const label = withHash && !String(t).startsWith("#") ? "#" + t : t;
+    return `<span class="tag">${escapeHTML(label)}</span>`;
+  }).join("");
+}
+
+function matchesFilter(w) {
+  if (current === "全部") return true;
+  return (w.tags || []).includes(current);
+}
+
+function displayCharTitle(c) {
+  if (c.title === "夜" && (c.subtitle || "").toUpperCase() === "NIGHT") {
+    return "夜【NIGHT】";
+  }
+  return c.title;
+}
+
+function render() {
+  grid.innerHTML = (WORKS || []).map((w, i) => {
+    if (!matchesFilter(w)) return "";
+    const id = w.id || String(i + 1);
+    return `
+    <a class="card" href="detail.html?id=${encodeURIComponent(id)}" aria-label="查看《${escapeHTML(w.title)}》介紹">
+      ${coverHTML(w, i)}
+      <div class="body">
+        <div class="tags">${tagHTML(w.tags)}</div>
+        <h2>${escapeHTML(w.title)}</h2>
+        <p>${escapeHTML(w.short)}</p>
+        <div class="more">查看介紹　→</div>
+      </div>
+    </a>`;
+  }).join("");
+}
+
+function renderCharacters() {
+  charGrid.innerHTML = (CHARACTERS || []).map((c, i) => {
+    const title = displayCharTitle(c);
+    const sub = (c.subtitle && title.indexOf(c.subtitle) === -1) ? `<div class="subtitle">${escapeHTML(c.subtitle)}</div>` : "";
+    return `
+    <button class="card" type="button" data-kind="char" data-index="${i}" aria-label="查看${escapeHTML(title)}簡介">
+      ${portraitHTML(c)}
+      <div class="body">
+        <div class="tags">${tagHTML(c.tags, true)}</div>
+        <h3>${escapeHTML(title)}</h3>
+        ${sub}
+        <p>${escapeHTML(c.short)}</p>
+        <div class="more">查看介紹　→</div>
+      </div>
+    </button>`;
+  }).join("");
+}
+
+(FILTERS || ["全部"]).forEach(name => {
+  const b = document.createElement("button");
+  b.className = "chip" + (name === "全部" ? " is-on" : "");
+  b.type = "button";
+  b.textContent = name;
+  b.addEventListener("click", () => {
+    current = name;
+    [...filtersEl.children].forEach(ch => ch.classList.toggle("is-on", ch.textContent === name));
+    render();
+  });
+  filtersEl.appendChild(b);
+});
+
+function onCardClick(e) {
+  const card = e.target.closest(".card");
+  if (!card) return;
+  if (card.dataset.kind !== "char") return;
+  const i = Number(card.dataset.index);
+  openCharModal(i);
+}
+charGrid.addEventListener("click", onCardClick);
+
+function openCharModal(i) {
+  const c = CHARACTERS[i];
+  if (!c) return;
+  dialogInner.classList.add("is-char");
+  modalMedia.classList.add("is-portrait");
+  modalMedia.innerHTML = portraitHTML(c);
+  document.getElementById("modalTags").innerHTML = tagHTML(c.tags, true);
+  document.getElementById("modalTitle").textContent = displayCharTitle(c);
+  document.getElementById("modalLong").textContent = c.long;
+  document.getElementById("modalMeta").textContent = c.subtitle && displayCharTitle(c).indexOf(c.subtitle) === -1 ? c.subtitle : "";
+  modal.showModal();
+}
+
+document.getElementById("closeBtn").addEventListener("click", () => modal.close());
+modal.addEventListener("click", (e) => {
+  if (e.target === modal) modal.close();
+});
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && modal.open) modal.close();
+});
+
+if (countEl) countEl.textContent = String((WORKS || []).length);
+if (charCountEl) charCountEl.textContent = String((CHARACTERS || []).length);
+render();
+renderCharacters();
+</script>
+</body>
+</html>

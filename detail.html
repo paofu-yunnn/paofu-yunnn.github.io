@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>泡芙🐈藏書室</title>
+  <meta name="description" content="泡芙的文字角色扮演劇本詳情。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600&family=Noto+Serif+TC:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #07080c;
+      --navy: #141a28;
+      --navy-2: #1b2336;
+      --gold: #c9a84c;
+      --gold-soft: #e8d5a3;
+      --gold-dim: rgba(201, 168, 76, .22);
+      --text: #efe8d8;
+      --muted: #9a9283;
+      --line: rgba(232, 213, 163, .16);
+      --card: #121826;
+      --shadow: 0 18px 50px rgba(0,0,0,.45);
+      --radius: 18px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      background:
+        radial-gradient(1200px 600px at 80% -10%, rgba(201,168,76,.08), transparent 55%),
+        radial-gradient(900px 500px at -10% 20%, rgba(40,60,110,.18), transparent 50%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+    a { color: inherit; }
+    .wrap { width: min(980px, calc(100% - 40px)); margin: 0 auto; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 8;
+      background: linear-gradient(180deg, rgba(7,8,12,.96) 70%, rgba(7,8,12,.86) 100%);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(8px);
+    }
+    .topbar .wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 56px;
+      gap: 12px;
+    }
+    .topbar a { text-decoration: none; }
+    .back {
+      color: var(--gold-soft);
+      font-size: 13px;
+      letter-spacing: .08em;
+    }
+    .back:hover { color: var(--gold); }
+    .brand {
+      font-family: "Noto Serif TC", serif;
+      letter-spacing: .12em;
+      font-size: 15px;
+    }
+
+    .hero-cover { padding: 28px 0 0; }
+    .cover-frame, .ph {
+      aspect-ratio: 16 / 9;
+      width: 100%;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: #0a0e16;
+    }
+    .cover-frame {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .cover-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+      display: block;
+    }
+    .ph {
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(201,168,76,.16), transparent 50%),
+        linear-gradient(160deg, #161c2c, #0b0e16 70%);
+      position: relative;
+    }
+    .ph::before {
+      content: "";
+      position: absolute;
+      inset: 14px;
+      border: 1px solid var(--gold-dim);
+      border-radius: 8px;
+    }
+    .ph-mark {
+      font-family: "Noto Serif TC", serif;
+      color: var(--gold);
+      letter-spacing: .2em;
+      font-size: 13px;
+      z-index: 1;
+    }
+
+    .info { padding: 28px 0 8px; }
+    .badges { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+    .badge {
+      font-size: 11px;
+      letter-spacing: .08em;
+      border-radius: 999px;
+      padding: 3px 10px;
+      border: 1px solid var(--gold-dim);
+      color: var(--gold-soft);
+      background: rgba(201,168,76,.08);
+    }
+    .badge.r18 {
+      color: #f0c9c9;
+      border-color: rgba(180,70,70,.45);
+      background: rgba(140,40,40,.28);
+    }
+    .info h1 {
+      font-family: "Noto Serif TC", serif;
+      font-weight: 700;
+      font-size: clamp(28px, 5vw, 42px);
+      letter-spacing: .08em;
+      line-height: 1.25;
+    }
+    .hashtags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 12px 0 0;
+      color: var(--gold);
+      font-size: 14px;
+      letter-spacing: .04em;
+    }
+    .blurb {
+      margin-top: 18px;
+      color: #d8d0c0;
+      font-size: 16px;
+      max-width: 42em;
+    }
+    .meta {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin: 22px 0 0;
+      padding: 16px 0;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    .meta div { min-width: 0; }
+    .meta dt {
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: .12em;
+      margin-bottom: 2px;
+    }
+    .meta dd { font-size: 15px; color: var(--gold-soft); }
+    .quote {
+      margin: 22px 0 0;
+      padding: 4px 0 4px 16px;
+      border-left: 2px solid var(--gold);
+      font-family: "Noto Serif TC", serif;
+      font-size: 18px;
+      letter-spacing: .04em;
+      color: var(--gold-soft);
+      line-height: 1.7;
+    }
+    .author-line {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 13px;
+      letter-spacing: .06em;
+    }
+    .author-line b { color: var(--gold-soft); font-weight: 500; }
+    .btn-chat {
+      display: inline-block;
+      margin-top: 22px;
+      text-decoration: none;
+      background: linear-gradient(180deg, #e0c56a, #c9a84c);
+      color: #1a1408;
+      font-weight: 600;
+      letter-spacing: .18em;
+      padding: 12px 28px;
+      border-radius: 999px;
+      border: 0;
+      font-size: 15px;
+      box-shadow: 0 10px 24px rgba(201,168,76,.28);
+    }
+    .btn-chat:hover { filter: brightness(1.06); }
+    .version {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: .08em;
+    }
+
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0;
+      margin: 28px 0 0;
+      border-bottom: 1px solid var(--line);
+      position: sticky;
+      top: 56px;
+      z-index: 7;
+      background: rgba(7,8,12,.94);
+    }
+    .tab {
+      appearance: none;
+      background: none;
+      border: 0;
+      border-bottom: 2px solid transparent;
+      color: var(--muted);
+      font: inherit;
+      font-size: 15px;
+      letter-spacing: .1em;
+      padding: 12px 16px;
+      cursor: pointer;
+      margin-bottom: -1px;
+    }
+    .tab:hover { color: var(--gold-soft); }
+    .tab.is-on {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+    }
+    .panel { padding: 28px 0 64px; display: none; }
+    .panel.is-on { display: block; }
+
+    .prose h3 {
+      font-family: "Noto Serif TC", serif;
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: .1em;
+      margin: 32px 0 12px;
+    }
+    .prose h3:first-child { margin-top: 0; }
+    .prose h4 {
+      font-family: "Noto Serif TC", serif;
+      font-size: 17px;
+      font-weight: 600;
+      margin: 22px 0 8px;
+      color: var(--gold-soft);
+    }
+    .prose p {
+      color: #d8d0c0;
+      font-size: 15.5px;
+      margin: 0 0 14px;
+    }
+
+    .lead-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+    .lead-card {
+      background: linear-gradient(180deg, var(--navy-2), var(--card));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .lead-card.has-img { display: grid; grid-template-columns: 140px 1fr; }
+    .lead-photo, .lead-ph {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      background: #0a0e16;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .lead-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+    }
+    .lead-body { padding: 18px 18px 20px; }
+    .lead-body h3 {
+      font-family: "Noto Serif TC", serif;
+      font-size: 20px;
+      letter-spacing: .08em;
+      margin-bottom: 8px;
+    }
+    .lead-body p { color: #d0c8b8; font-size: 14px; }
+
+    .opening-card {
+      background: linear-gradient(180deg, #161c2c, #101623);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 28px 28px 32px;
+      box-shadow: var(--shadow);
+    }
+    .opening-card .status {
+      color: var(--gold);
+      font-size: 12px;
+      letter-spacing: .04em;
+      margin-bottom: 18px;
+      line-height: 1.6;
+    }
+    .opening-card p {
+      font-family: "Noto Serif TC", serif;
+      color: #e6dfd0;
+      font-size: 16px;
+      margin: 0 0 16px;
+      line-height: 1.9;
+    }
+    .opening-card p:last-child { margin-bottom: 0; }
+
+    .placeholder-box {
+      border: 1px dashed var(--gold-dim);
+      border-radius: 16px;
+      padding: 22px 20px;
+      background: rgba(201,168,76,.05);
+      color: var(--muted);
+      margin-bottom: 22px;
+    }
+    .placeholder-box strong {
+      display: block;
+      color: var(--gold);
+      font-weight: 600;
+      letter-spacing: .12em;
+      margin-bottom: 8px;
+    }
+    .shots {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin: 18px 0 28px;
+    }
+    .shots figure {
+      margin: 0;
+      background: #0a0e16;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .shots img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: contain;
+    }
+
+    .discord {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 18px 20px;
+      background: rgba(20,26,40,.7);
+    }
+    .discord p { color: #d8d0c0; font-size: 14px; margin: 0 0 6px; }
+    .discord a { color: var(--gold); text-decoration: none; }
+    .discord a:hover { text-decoration: underline; }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 28px 0 48px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    footer .credit { color: var(--gold-soft); letter-spacing: .08em; margin-bottom: 8px; }
+    footer a { color: var(--gold); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    .missing {
+      padding: 80px 0;
+      text-align: center;
+      color: var(--muted);
+    }
+    .missing a { color: var(--gold); }
+
+    @media (max-width: 720px) {
+      .wrap { width: min(980px, calc(100% - 28px)); }
+      .meta { grid-template-columns: 1fr; gap: 10px; }
+      .lead-grid, .shots { grid-template-columns: 1fr; }
+      .lead-card.has-img { grid-template-columns: 1fr; }
+      .tab { padding: 12px 10px; font-size: 14px; letter-spacing: .06em; }
+      .opening-card { padding: 20px 16px 24px; }
+      .info h1 { font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="wrap">
+      <a class="back" href="index.html#scripts">←　返回藏書室</a>
+      <a class="brand" href="index.html">泡芙🐈藏書室</a>
+    </div>
+  </div>
+  <div class="wrap" id="app"></div>
+
+<script src="scripts.js"></script>
+<script>
+const COVER_DIR = "assets/covers/";
+const LEAD_DIR = "assets/leads/";
+const SHOT_DIR = "assets/screenshots/";
+const DISCORD_URL = "https://discord.gg/wNgvn5wBC";
+const DEFAULT_AUTHOR = "泡芙Yunnn.cc（原創）";
+
+function escapeHTML(s) {
+  return String(s || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function isR18(w) {
+  if (w.r18 === true) return true;
+  if (w.r18 === false) return false;
+  return (w.tags || []).includes("18禁");
+}
+
+function hasText(s) { return String(s || "").trim().length > 0; }
+
+function renderRich(text) {
+  const lines = String(text || "").replace(/\r\n/g, "\n").split("\n");
+  let html = "";
+  let buf = [];
+  const flush = () => {
+    const t = buf.join("\n").trim();
+    if (t) html += `<p>${escapeHTML(t).replace(/\n/g, "<br>")}</p>`;
+    buf = [];
+  };
+  for (const line of lines) {
+    if (/^###\s+/.test(line)) {
+      flush();
+      html += `<h4>${escapeHTML(line.replace(/^###\s+/, ""))}</h4>`;
+    } else if (/^##\s+/.test(line)) {
+      flush();
+      html += `<h3>${escapeHTML(line.replace(/^##\s+/, ""))}</h3>`;
+    } else if (line.trim() === "") {
+      flush();
+    } else {
+      buf.push(line);
+    }
+  }
+  flush();
+  return html;
+}
+
+function coverHTML(w) {
+  const name = (w.cover || "").trim();
+  if (name) {
+    return `<div class="cover-frame"><img src="${COVER_DIR}${encodeURI(name)}" alt="《${escapeHTML(w.title)}》封面"></div>`;
+  }
+  return `<div class="ph"><div class="ph-mark">封面待補</div></div>`;
+}
+
+function discordHTML() {
+  return `<div class="discord">
+    <p>有問題歡迎到 DC 找我，直接 @泡芙Yunnn</p>
+    <p><a href="${DISCORD_URL}" target="_blank" rel="noopener">Lunly 的 Discord 社群</a></p>
+  </div>`;
+}
+
+function footerHTML() {
+  return `<footer>
+    <div class="credit">泡芙Yunnn.cc</div>
+    <div>有問題歡迎到 <a href="${DISCORD_URL}" target="_blank" rel="noopener">Lunly 的 Discord 社群</a> 找我，直接 @泡芙Yunnn</div>
+  </footer>`;
+}
+
+function findWork() {
+  const params = new URLSearchParams(location.search);
+  const id = (params.get("id") || "").trim();
+  const list = WORKS || [];
+  let w = list.find(x => String(x.id) === id);
+  if (!w && /^\d+$/.test(id)) w = list[Number(id) - 1];
+  return w || null;
+}
+
+function tabEnabled(w, key) {
+  if (key === "story") return hasText(w.story) || hasText(w.long);
+  if (key === "leads") return Array.isArray(w.leads) && w.leads.length > 0;
+  if (key === "opening") return hasText(w.opening);
+  if (key === "author") {
+    return hasText(w.authorNote) || (Array.isArray(w.screenshots) && w.screenshots.length > 0) || w.authorTab === true;
+  }
+  return false;
+}
+
+const TAB_DEFS = [
+  { key: "story", label: "故事介紹" },
+  { key: "leads", label: "角色介紹" },
+  { key: "opening", label: "開場白試閱" },
+  { key: "author", label: "作者的話" }
+];
+
+function storyPanel(w) {
+  const src = hasText(w.story) ? w.story : w.long;
+  return `<div class="prose">${renderRich(src)}</div>`;
+}
+
+function leadsPanel(w) {
+  return `<div class="lead-grid">${(w.leads || []).map(lead => {
+    const img = (lead.image || "").trim();
+    const photo = img
+      ? `<div class="lead-photo"><img src="${LEAD_DIR}${encodeURI(img)}" alt="${escapeHTML(lead.name)}"></div>`
+      : "";
+    return `<article class="lead-card${img ? " has-img" : ""}">
+      ${photo}
+      <div class="lead-body">
+        <h3>${escapeHTML(lead.name)}</h3>
+        <p>${escapeHTML(lead.desc || "")}</p>
+      </div>
+    </article>`;
+  }).join("")}</div>`;
+}
+
+function openingPanel(w) {
+  const lines = String(w.opening || "").replace(/\r\n/g, "\n").split("\n");
+  let html = "";
+  let buf = [];
+  const flush = (cls) => {
+    const t = buf.join("\n").trim();
+    if (!t) { buf = []; return; }
+    const tag = cls === "status" ? "div" : "p";
+    html += `<${tag} class="${cls}">${escapeHTML(t).replace(/\n/g, "<br>")}</${tag}>`;
+    buf = [];
+  };
+  let first = true;
+  for (const line of lines) {
+    if (line.trim() === "") { flush(first ? "status" : ""); first = false; continue; }
+    buf.push(line);
+  }
+  flush(first ? "status" : "");
+  // If first block wasn't a 【狀態】 line, don't force status class
+  if (html.startsWith('<div class="status">') && !html.includes("【狀態】") && !html.includes("狀態")) {
+    html = html.replace('<div class="status">', "<p>").replace("</div>", "</p>");
+  }
+  return `<div class="opening-card">${html}</div>`;
+}
+
+function authorPanel(w) {
+  let html = "";
+  const pending = !hasText(w.authorNote) && !(w.screenshots && w.screenshots.length);
+  if (pending) {
+    html += `<div class="placeholder-box">
+      <strong>【待作者填寫】</strong>
+      這段留給作者寫想說的話。請直接改 scripts.js 裡這部的 authorNote。<br>
+      若要放試玩截圖，把圖檔放到 assets/screenshots/，並在 screenshots 陣列填上檔名。
+    </div>`;
+  }
+  if (hasText(w.authorNote)) html += `<div class="prose">${renderRich(w.authorNote)}</div>`;
+  if (w.screenshots && w.screenshots.length) {
+    html += `<div class="shots">${w.screenshots.map((name, i) =>
+      `<figure><img src="${SHOT_DIR}${encodeURI(name)}" alt="試玩截圖 ${i + 1}"></figure>`
+    ).join("")}</div>`;
+  }
+  html += discordHTML();
+  return html;
+}
+
+function render() {
+  const app = document.getElementById("app");
+  const w = findWork();
+  if (!w) {
+    document.title = "找不到這部劇本　泡芙🐈藏書室";
+    app.innerHTML = `<div class="missing"><p>找不到這部劇本。</p><p><a href="index.html#scripts">返回藏書室</a></p></div>` + footerHTML();
+    return;
+  }
+  document.title = `${w.title}　泡芙🐈藏書室`;
+
+  const badges = [];
+  if (isR18(w)) badges.push(`<span class="badge r18">R18</span>`);
+  if (hasText(w.category)) badges.push(`<span class="badge">${escapeHTML(w.category)}</span>`);
+  if (hasText(w.length)) badges.push(`<span class="badge">${escapeHTML(w.length)}</span>`);
+
+  const tags = (w.hashtags || []).map(t => {
+    const label = String(t).startsWith("#") ? t : "#" + t;
+    return `<span>${escapeHTML(label)}</span>`;
+  }).join("");
+
+  const metaItems = [
+    ["你扮演", w.playerRole],
+    ["對象性別", w.targetGender],
+    ["畫風", w.artStyle]
+  ].filter(([, v]) => hasText(v));
+
+  const blurb = hasText(w.blurb) ? w.blurb : "";
+  const author = hasText(w.author) ? w.author : DEFAULT_AUTHOR;
+  const chat = hasText(w.chatLink)
+    ? `<a class="btn-chat" href="${escapeHTML(w.chatLink)}" target="_blank" rel="noopener">開始聊天</a>`
+    : "";
+
+  const tabs = TAB_DEFS.filter(t => tabEnabled(w, t.key));
+  const initial = (location.hash || "").replace("#", "");
+  const startKey = tabs.some(t => t.key === initial) ? initial : (tabs[0] && tabs[0].key);
+
+  const panels = {
+    story: storyPanel,
+    leads: leadsPanel,
+    opening: openingPanel,
+    author: authorPanel
+  };
+
+  app.innerHTML = `
+    <div class="hero-cover">${coverHTML(w)}</div>
+    <header class="info">
+      ${badges.length ? `<div class="badges">${badges.join("")}</div>` : ""}
+      <h1>${escapeHTML(w.title)}</h1>
+      ${tags ? `<div class="hashtags">${tags}</div>` : ""}
+      ${blurb ? `<p class="blurb">${escapeHTML(blurb)}</p>` : ""}
+      ${metaItems.length ? `<dl class="meta">${metaItems.map(([k,v]) =>
+        `<div><dt>${k}</dt><dd>${escapeHTML(v)}</dd></div>`).join("")}</dl>` : ""}
+      ${hasText(w.quote) ? `<blockquote class="quote">「${escapeHTML(w.quote)}」</blockquote>` : ""}
+      <p class="author-line">作者　<b>${escapeHTML(author)}</b></p>
+      ${chat}
+      ${w.version ? `<div class="version">最新版 ${escapeHTML(w.version)}</div>` : ""}
+    </header>
+    ${tabs.length ? `<nav class="tabs" role="tablist" aria-label="詳情分頁">${tabs.map(t =>
+      `<button class="tab${t.key === startKey ? " is-on" : ""}" type="button" role="tab" data-tab="${t.key}" aria-selected="${t.key === startKey}">${t.label}</button>`
+    ).join("")}</nav>` : ""}
+    ${tabs.map(t =>
+      `<section class="panel${t.key === startKey ? " is-on" : ""}" id="panel-${t.key}" role="tabpanel">${panels[t.key](w)}</section>`
+    ).join("")}
+    ${footerHTML()}
+  `;
+
+  app.querySelectorAll(".tab").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const key = btn.dataset.tab;
+      app.querySelectorAll(".tab").forEach(b => {
+        b.classList.toggle("is-on", b === btn);
+        b.setAttribute("aria-selected", b === btn ? "true" : "false");
+      });
+      app.querySelectorAll(".panel").forEach(p => {
+        p.classList.toggle("is-on", p.id === "panel-" + key);
+      });
+      history.replaceState(null, "", `?id=${encodeURIComponent(w.id)}#${key}`);
+    });
+  });
+}
+
+render();
+</script>
+</body>
+</html>
