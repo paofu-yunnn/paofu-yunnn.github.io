@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>泡芙🐈藏書室</title>
-  <meta name="description" content="泡芙的文字角色扮演劇本詳情。">
+  <meta name="description" content="泡芙的文字角色扮演劇本與角色卡詳情。">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600&family=Noto+Serif+TC:wght@500;600;700&display=swap" rel="stylesheet">
@@ -380,6 +380,57 @@
     }
     .missing a { color: var(--gold); }
 
+
+    .hero-char {
+      display: grid;
+      grid-template-columns: minmax(240px, 300px) 1fr;
+      gap: 36px;
+      align-items: start;
+      padding: 28px 0 8px;
+    }
+    .portrait-frame, .ph-portrait {
+      aspect-ratio: 3 / 4;
+      width: 100%;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: #0a0e16;
+    }
+    .portrait-frame {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .portrait-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+      display: block;
+    }
+    .ph-portrait {
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(201,168,76,.16), transparent 50%),
+        linear-gradient(160deg, #161c2c, #0b0e16 70%);
+      position: relative;
+    }
+    .ph-portrait::before {
+      content: "";
+      position: absolute;
+      inset: 14px;
+      border: 1px solid var(--gold-dim);
+      border-radius: 8px;
+    }
+    .hero-char .info { padding: 4px 0 0; }
+    .char-sub {
+      color: var(--gold-soft);
+      font-size: 14px;
+      letter-spacing: .1em;
+      margin-top: 8px;
+    }
+
     @media (max-width: 720px) {
       .wrap { width: min(980px, calc(100% - 28px)); }
       .meta { grid-template-columns: 1fr; gap: 10px; }
@@ -388,6 +439,9 @@
       .tab { padding: 12px 10px; font-size: 14px; letter-spacing: .06em; }
       .opening-card { padding: 20px 16px 24px; }
       .info h1 { font-size: 28px; }
+      .hero-char { grid-template-columns: 1fr; gap: 20px; }
+      .hero-char .portrait-frame,
+      .hero-char .ph-portrait { width: min(100%, 280px); margin: 0 auto; }
     }
   </style>
 </head>
@@ -403,6 +457,7 @@
 <script src="scripts.js"></script>
 <script>
 const COVER_DIR = "assets/covers/";
+const PORTRAIT_DIR = "assets/portraits/";
 const LEAD_DIR = "assets/leads/";
 const SHOT_DIR = "assets/screenshots/";
 const DISCORD_URL = "https://discord.gg/wNgvn5wBC";
@@ -423,6 +478,27 @@ function isR18(w) {
 }
 
 function hasText(s) { return String(s || "").trim().length > 0; }
+
+function params() { return new URLSearchParams(location.search); }
+function isCharPage() { return params().get("type") === "char"; }
+
+function displayCharTitle(c) {
+  if (c.title === "夜" && (c.subtitle || "").toUpperCase() === "NIGHT") return "夜【NIGHT】";
+  return c.title;
+}
+
+function findItem() {
+  const id = (params().get("id") || "").trim();
+  const list = isCharPage() ? (CHARACTERS || []) : (WORKS || []);
+  let item = list.find(x => String(x.id) === id);
+  if (!item && /^\d+$/.test(id)) item = list[Number(id) - 1];
+  return item || null;
+}
+
+function queryBase(item) {
+  const id = encodeURIComponent(item.id || "");
+  return isCharPage() ? `?type=char&id=${id}` : `?id=${id}`;
+}
 
 function renderRich(text) {
   const lines = String(text || "").replace(/\r\n/g, "\n").split("\n");
@@ -458,6 +534,14 @@ function coverHTML(w) {
   return `<div class="ph"><div class="ph-mark">封面待補</div></div>`;
 }
 
+function portraitHTML(c) {
+  const name = (c.portrait || "").trim();
+  if (name) {
+    return `<div class="portrait-frame"><img src="${PORTRAIT_DIR}${encodeURI(name)}" alt="${escapeHTML(displayCharTitle(c))} 肖像"></div>`;
+  }
+  return `<div class="ph-portrait"><div class="ph-mark">肖像待補</div></div>`;
+}
+
 function discordHTML() {
   return `<div class="discord">
     <p>有問題歡迎到 DC 找我，直接 @泡芙Yunnn</p>
@@ -472,16 +556,7 @@ function footerHTML() {
   </footer>`;
 }
 
-function findWork() {
-  const params = new URLSearchParams(location.search);
-  const id = (params.get("id") || "").trim();
-  const list = WORKS || [];
-  let w = list.find(x => String(x.id) === id);
-  if (!w && /^\d+$/.test(id)) w = list[Number(id) - 1];
-  return w || null;
-}
-
-function tabEnabled(w, key) {
+function tabEnabledWork(w, key) {
   if (key === "story") return hasText(w.story) || hasText(w.long);
   if (key === "leads") return Array.isArray(w.leads) && w.leads.length > 0;
   if (key === "opening") return hasText(w.opening);
@@ -491,15 +566,34 @@ function tabEnabled(w, key) {
   return false;
 }
 
-const TAB_DEFS = [
+function tabEnabledChar(c, key) {
+  if (key === "profile") return hasText(c.long) || hasText(c.profile);
+  if (key === "opening") return hasText(c.opening);
+  if (key === "author") {
+    return hasText(c.authorNote) || (Array.isArray(c.screenshots) && c.screenshots.length > 0) || c.authorTab === true;
+  }
+  return false;
+}
+
+const WORK_TABS = [
   { key: "story", label: "故事介紹" },
   { key: "leads", label: "角色介紹" },
+  { key: "opening", label: "開場白試閱" },
+  { key: "author", label: "作者的話" }
+];
+const CHAR_TABS = [
+  { key: "profile", label: "角色介紹" },
   { key: "opening", label: "開場白試閱" },
   { key: "author", label: "作者的話" }
 ];
 
 function storyPanel(w) {
   const src = hasText(w.story) ? w.story : w.long;
+  return `<div class="prose">${renderRich(src)}</div>`;
+}
+
+function profilePanel(c) {
+  const src = hasText(c.profile) ? c.profile : c.long;
   return `<div class="prose">${renderRich(src)}</div>`;
 }
 
@@ -536,26 +630,26 @@ function openingPanel(w) {
     buf.push(line);
   }
   flush(first ? "status" : "");
-  // If first block wasn't a 【狀態】 line, don't force status class
   if (html.startsWith('<div class="status">') && !html.includes("【狀態】") && !html.includes("狀態")) {
     html = html.replace('<div class="status">', "<p>").replace("</div>", "</p>");
   }
   return `<div class="opening-card">${html}</div>`;
 }
 
-function authorPanel(w) {
+function authorPanel(item) {
   let html = "";
-  const pending = !hasText(w.authorNote) && !(w.screenshots && w.screenshots.length);
+  const pending = !hasText(item.authorNote) && !(item.screenshots && item.screenshots.length);
   if (pending) {
+    const where = isCharPage() ? "這張角色卡" : "這部";
     html += `<div class="placeholder-box">
       <strong>【待作者填寫】</strong>
-      這段留給作者寫想說的話。請直接改 scripts.js 裡這部的 authorNote。<br>
+      這段留給作者寫想說的話。請直接改 scripts.js 裡${where}的 authorNote。<br>
       若要放試玩截圖，把圖檔放到 assets/screenshots/，並在 screenshots 陣列填上檔名。
     </div>`;
   }
-  if (hasText(w.authorNote)) html += `<div class="prose">${renderRich(w.authorNote)}</div>`;
-  if (w.screenshots && w.screenshots.length) {
-    html += `<div class="shots">${w.screenshots.map((name, i) =>
+  if (hasText(item.authorNote)) html += `<div class="prose">${renderRich(item.authorNote)}</div>`;
+  if (item.screenshots && item.screenshots.length) {
+    html += `<div class="shots">${item.screenshots.map((name, i) =>
       `<figure><img src="${SHOT_DIR}${encodeURI(name)}" alt="試玩截圖 ${i + 1}"></figure>`
     ).join("")}</div>`;
   }
@@ -563,15 +657,38 @@ function authorPanel(w) {
   return html;
 }
 
-function render() {
-  const app = document.getElementById("app");
-  const w = findWork();
-  if (!w) {
-    document.title = "找不到這部劇本　泡芙🐈藏書室";
-    app.innerHTML = `<div class="missing"><p>找不到這部劇本。</p><p><a href="index.html#scripts">返回藏書室</a></p></div>` + footerHTML();
-    return;
-  }
+function bindTabs(app, item) {
+  app.querySelectorAll(".tab").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const key = btn.dataset.tab;
+      app.querySelectorAll(".tab").forEach(b => {
+        b.classList.toggle("is-on", b === btn);
+        b.setAttribute("aria-selected", b === btn ? "true" : "false");
+      });
+      app.querySelectorAll(".panel").forEach(p => {
+        p.classList.toggle("is-on", p.id === "panel-" + key);
+      });
+      history.replaceState(null, "", `${queryBase(item)}#${key}`);
+    });
+  });
+}
+
+function tabsAndPanels(item, tabDefs, enabledFn, panelFns) {
+  const tabs = tabDefs.filter(t => enabledFn(item, t.key));
+  const initial = (location.hash || "").replace("#", "");
+  const startKey = tabs.some(t => t.key === initial) ? initial : (tabs[0] && tabs[0].key);
+  const nav = tabs.length ? `<nav class="tabs" role="tablist" aria-label="詳情分頁">${tabs.map(t =>
+    `<button class="tab${t.key === startKey ? " is-on" : ""}" type="button" role="tab" data-tab="${t.key}" aria-selected="${t.key === startKey}">${t.label}</button>`
+  ).join("")}</nav>` : "";
+  const panels = tabs.map(t =>
+    `<section class="panel${t.key === startKey ? " is-on" : ""}" id="panel-${t.key}" role="tabpanel">${panelFns[t.key](item)}</section>`
+  ).join("");
+  return nav + panels;
+}
+
+function renderWork(app, w) {
   document.title = `${w.title}　泡芙🐈藏書室`;
+  document.querySelector(".topbar .back").setAttribute("href", "index.html#scripts");
 
   const badges = [];
   if (isR18(w)) badges.push(`<span class="badge r18">R18</span>`);
@@ -595,17 +712,6 @@ function render() {
     ? `<a class="btn-chat" href="${escapeHTML(w.chatLink)}" target="_blank" rel="noopener">開始聊天</a>`
     : "";
 
-  const tabs = TAB_DEFS.filter(t => tabEnabled(w, t.key));
-  const initial = (location.hash || "").replace("#", "");
-  const startKey = tabs.some(t => t.key === initial) ? initial : (tabs[0] && tabs[0].key);
-
-  const panels = {
-    story: storyPanel,
-    leads: leadsPanel,
-    opening: openingPanel,
-    author: authorPanel
-  };
-
   app.innerHTML = `
     <div class="hero-cover">${coverHTML(w)}</div>
     <header class="info">
@@ -620,28 +726,74 @@ function render() {
       ${chat}
       ${w.version ? `<div class="version">最新版 ${escapeHTML(w.version)}</div>` : ""}
     </header>
-    ${tabs.length ? `<nav class="tabs" role="tablist" aria-label="詳情分頁">${tabs.map(t =>
-      `<button class="tab${t.key === startKey ? " is-on" : ""}" type="button" role="tab" data-tab="${t.key}" aria-selected="${t.key === startKey}">${t.label}</button>`
-    ).join("")}</nav>` : ""}
-    ${tabs.map(t =>
-      `<section class="panel${t.key === startKey ? " is-on" : ""}" id="panel-${t.key}" role="tabpanel">${panels[t.key](w)}</section>`
-    ).join("")}
+    ${tabsAndPanels(w, WORK_TABS, tabEnabledWork, {
+      story: storyPanel, leads: leadsPanel, opening: openingPanel, author: authorPanel
+    })}
     ${footerHTML()}
   `;
+  bindTabs(app, w);
+}
 
-  app.querySelectorAll(".tab").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const key = btn.dataset.tab;
-      app.querySelectorAll(".tab").forEach(b => {
-        b.classList.toggle("is-on", b === btn);
-        b.setAttribute("aria-selected", b === btn ? "true" : "false");
-      });
-      app.querySelectorAll(".panel").forEach(p => {
-        p.classList.toggle("is-on", p.id === "panel-" + key);
-      });
-      history.replaceState(null, "", `?id=${encodeURIComponent(w.id)}#${key}`);
-    });
-  });
+function renderChar(app, c) {
+  const title = displayCharTitle(c);
+  document.title = `${title}　泡芙🐈藏書室`;
+  document.querySelector(".topbar .back").setAttribute("href", "index.html#characters");
+
+  const tags = (c.tags || []).map(t => {
+    const label = String(t).startsWith("#") ? t : "#" + t;
+    return `<span>${escapeHTML(label)}</span>`;
+  }).join("");
+
+  const age = (c.age || "").trim();
+  const sub = (c.subtitle || "").trim();
+  const subLine = (sub && sub !== age) ? `<div class="char-sub">${escapeHTML(sub)}</div>` : "";
+  const metaItems = [];
+  if (age) metaItems.push(["年齡", age]);
+
+  const blurb = hasText(c.blurb) ? c.blurb : (c.short || "");
+  const author = hasText(c.author) ? c.author : DEFAULT_AUTHOR;
+  const chat = hasText(c.chatLink)
+    ? `<a class="btn-chat" href="${escapeHTML(c.chatLink)}" target="_blank" rel="noopener">開始聊天</a>`
+    : "";
+
+  const metaHTML = metaItems.length ? `<dl class="meta">${metaItems.map(([k,v]) =>
+    `<div><dt>${k}</dt><dd>${escapeHTML(v)}</dd></div>`
+  ).join("")}</dl>` : "";
+
+  app.innerHTML = `
+    <div class="hero-char">
+      ${portraitHTML(c)}
+      <header class="info">
+        <h1>${escapeHTML(title)}</h1>
+        ${subLine}
+        ${tags ? `<div class="hashtags">${tags}</div>` : ""}
+        ${blurb ? `<p class="blurb">${escapeHTML(blurb)}</p>` : ""}
+        ${metaHTML}
+        ${hasText(c.quote) ? `<blockquote class="quote">「${escapeHTML(c.quote)}」</blockquote>` : ""}
+        <p class="author-line">作者　<b>${escapeHTML(author)}</b></p>
+        ${chat}
+      </header>
+    </div>
+    ${tabsAndPanels(c, CHAR_TABS, tabEnabledChar, {
+      profile: profilePanel, opening: openingPanel, author: authorPanel
+    })}
+    ${footerHTML()}
+  `;
+  bindTabs(app, c);
+}
+
+function render() {
+  const app = document.getElementById("app");
+  const item = findItem();
+  const kind = isCharPage() ? "角色卡" : "劇本";
+  if (!item) {
+    document.title = `找不到這${isCharPage() ? "張角色卡" : "部劇本"}　泡芙🐈藏書室`;
+    const back = isCharPage() ? "index.html#characters" : "index.html#scripts";
+    app.innerHTML = `<div class="missing"><p>找不到這${isCharPage() ? "張角色卡" : "部劇本"}。</p><p><a href="${back}">返回藏書室</a></p></div>` + footerHTML();
+    return;
+  }
+  if (isCharPage()) renderChar(app, item);
+  else renderWork(app, item);
 }
 
 render();

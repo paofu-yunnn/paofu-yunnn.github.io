@@ -302,75 +302,6 @@
     footer a { color: var(--gold); text-decoration: none; }
     footer a:hover { text-decoration: underline; }
 
-    dialog.modal {
-      border: 1px solid var(--line);
-      border-radius: 22px;
-      background: #101623;
-      color: var(--text);
-      width: min(820px, calc(100% - 28px));
-      max-height: 92vh;
-      overflow: auto;
-      padding: 0;
-      box-shadow: var(--shadow);
-    }
-    dialog.modal::backdrop { background: rgba(4,5,9,.78); }
-    #modalMedia .cover-frame { border-radius: 0; }
-    .modal-ph { width: 100%; }
-    .modal-body { padding: 24px 26px 28px; }
-    .modal-body h2 {
-      font-family: "Noto Serif TC", serif;
-      font-size: 26px;
-      line-height: 1.35;
-      letter-spacing: .06em;
-      margin: 8px 0 14px;
-    }
-    .modal-body .long { color: #d8d0c0; font-size: 15px; }
-    .meta {
-      margin-top: 18px;
-      color: var(--muted);
-      font-size: 13px;
-    }
-    .close {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      border: 1px solid var(--line);
-      background: rgba(7,8,12,.6);
-      color: var(--gold-soft);
-      cursor: pointer;
-      font-size: 20px;
-      line-height: 1;
-      z-index: 2;
-    }
-    .dialog-inner { position: relative; }
-    .dialog-inner.is-char {
-      display: block;
-    }
-    @media (min-width: 720px) {
-      .dialog-inner.is-char {
-        display: grid;
-        grid-template-columns: minmax(220px, 280px) 1fr;
-        align-items: stretch;
-      }
-      .dialog-inner.is-char #modalMedia .portrait-frame,
-      .dialog-inner.is-char #modalMedia .ph-portrait {
-        height: 100%;
-        min-height: 360px;
-        aspect-ratio: auto;
-      }
-      .dialog-inner.is-char .modal-body { padding-left: 8px; }
-    }
-    @media (max-width: 719px) {
-      #modalMedia.is-portrait .portrait-frame,
-      #modalMedia.is-portrait .ph-portrait {
-        max-height: 52vh;
-        margin: 0 auto;
-        width: min(100%, calc(52vh * 3 / 4));
-      }
-    }
     .hidden { display: none !important; }
   </style>
 </head>
@@ -403,7 +334,7 @@
     <section id="characters">
       <div class="section-head">
         <h2>角色卡</h2>
-        <div class="hint">直式肖像以 3:4 完整顯示，不會裁切</div>
+        <div class="hint">點進卡片即可查看詳情頁</div>
       </div>
       <div class="char-grid" id="charGrid" aria-label="角色卡列表"></div>
     </section>
@@ -414,18 +345,6 @@
     </footer>
   </div>
 
-  <dialog class="modal" id="modal">
-    <div class="dialog-inner" id="dialogInner">
-      <button class="close" type="button" aria-label="關閉" id="closeBtn">×</button>
-      <div id="modalMedia"></div>
-      <div class="modal-body">
-        <div class="tags" id="modalTags"></div>
-        <h2 id="modalTitle"></h2>
-        <p class="long" id="modalLong"></p>
-        <p class="meta" id="modalMeta"></p>
-      </div>
-    </div>
-  </dialog>
 
 <script src="scripts.js"></script>
 <script>
@@ -435,9 +354,6 @@ const PORTRAIT_DIR = "assets/portraits/";
 const grid = document.getElementById("grid");
 const charGrid = document.getElementById("charGrid");
 const filtersEl = document.getElementById("filters");
-const modal = document.getElementById("modal");
-const dialogInner = document.getElementById("dialogInner");
-const modalMedia = document.getElementById("modalMedia");
 const countEl = document.getElementById("count");
 const charCountEl = document.getElementById("charCount");
 let current = "全部";
@@ -521,8 +437,9 @@ function renderCharacters() {
   charGrid.innerHTML = (CHARACTERS || []).map((c, i) => {
     const title = displayCharTitle(c);
     const sub = (c.subtitle && title.indexOf(c.subtitle) === -1) ? `<div class="subtitle">${escapeHTML(c.subtitle)}</div>` : "";
+    const id = c.id || String(i + 1);
     return `
-    <button class="card" type="button" data-kind="char" data-index="${i}" aria-label="查看${escapeHTML(title)}簡介">
+    <a class="card" href="detail.html?type=char&id=${encodeURIComponent(id)}" aria-label="查看${escapeHTML(title)}介紹">
       ${portraitHTML(c)}
       <div class="body">
         <div class="tags">${tagHTML(c.tags, true)}</div>
@@ -531,7 +448,7 @@ function renderCharacters() {
         <p>${escapeHTML(c.short)}</p>
         <div class="more">查看介紹　→</div>
       </div>
-    </button>`;
+    </a>`;
   }).join("");
 }
 
@@ -546,36 +463,6 @@ function renderCharacters() {
     render();
   });
   filtersEl.appendChild(b);
-});
-
-function onCardClick(e) {
-  const card = e.target.closest(".card");
-  if (!card) return;
-  if (card.dataset.kind !== "char") return;
-  const i = Number(card.dataset.index);
-  openCharModal(i);
-}
-charGrid.addEventListener("click", onCardClick);
-
-function openCharModal(i) {
-  const c = CHARACTERS[i];
-  if (!c) return;
-  dialogInner.classList.add("is-char");
-  modalMedia.classList.add("is-portrait");
-  modalMedia.innerHTML = portraitHTML(c);
-  document.getElementById("modalTags").innerHTML = tagHTML(c.tags, true);
-  document.getElementById("modalTitle").textContent = displayCharTitle(c);
-  document.getElementById("modalLong").textContent = c.long;
-  document.getElementById("modalMeta").textContent = c.subtitle && displayCharTitle(c).indexOf(c.subtitle) === -1 ? c.subtitle : "";
-  modal.showModal();
-}
-
-document.getElementById("closeBtn").addEventListener("click", () => modal.close());
-modal.addEventListener("click", (e) => {
-  if (e.target === modal) modal.close();
-});
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && modal.open) modal.close();
 });
 
 if (countEl) countEl.textContent = String((WORKS || []).length);

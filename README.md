@@ -4,12 +4,12 @@
 本機預覽時，用瀏覽器打開 `index.html` 即可，或用資料夾開一個本機網頁伺服器。
 
 頁面上有兩個區塊：**劇本**與**角色卡**。新增、刪除、改簡介都只改 `scripts.js`。
-點進劇本卡片會打開獨立的詳情頁 `detail.html?id=劇本代號`（GitHub Pages 也適用，可直接分享網址）。角色卡仍在首頁以彈窗查看。
+點進劇本或角色卡，都會打開同一套獨立詳情頁（GitHub Pages 也適用，可直接分享網址）：劇本是 `detail.html?id=劇本代號`，角色卡是 `detail.html?type=char&id=角色代號`。
 
 ## 資料夾
 
 - `index.html`：首頁外觀與互動（一般不用改）
-- `detail.html`：劇本詳情頁（一般不用改）
+- `detail.html`：劇本與角色卡的詳情頁（一般不用改）
 - `scripts.js`：**新增、刪除、改簡介、改平台欄位與分頁內容都改這一份**
 - `assets/covers/`：劇本封面（建議 16:9，例如 1024×576）。橫式圖會完整顯示，不會被裁切
 - `assets/portraits/`：角色卡肖像（直式圖會以 3:4 的框完整顯示，不會被裁切）
@@ -41,9 +41,12 @@
 
 1. 若有直式肖像，把圖檔放到 `assets/portraits/`（只放檔案，例如 `my-portrait.jpg`）
 2. 打開 `scripts.js`，複製「角色卡範本」那一整段，貼到 `CHARACTERS` 陣列裡
-3. 改名稱、副標、標籤、短介、長介
-4. 有肖像就把 `portrait` 改成檔名；沒有肖像就留 `""`，網頁會顯示「肖像待補」
-5. 存檔後重新整理瀏覽器
+3. 一定要寫不重複的 `id`（詳情頁網址會用到，例如 `detail.html?type=char&id=kanzaki`）
+4. 改名稱、副標、年齡、標籤、短介、長介
+5. 有肖像就把 `portrait` 改成檔名；沒有肖像就留 `""`，網頁會顯示「肖像待補」
+6. 可按需要填 `quote`（一句代表性的話）、`chatLink`（有網址才會出現「開始聊天」）、`opening`（開場白試閱）、`authorNote` 與 `screenshots`（作者的話）
+7. 沒有內容的分頁會自動隱藏。若「作者的話」還沒寫、但想先露出分頁，可把 `authorTab` 設成 `true`
+8. 存檔後重新整理瀏覽器
 
 ## 自己刪除一張角色卡
 
@@ -60,7 +63,7 @@
 2. 把 `index.html`、`detail.html`、`scripts.js` 和 `assets` 資料夾上傳到專案（不必上傳預覽圖）
 3. 到專案的 Settings → Pages，Source 選 Deploy from a branch，分支選 `main`，資料夾選 `/ (root)`
 4. 做好之後網址會是 `https://你的帳號.github.io/script-portfolio/`
-5. 單部劇本詳情頁會是 `https://你的帳號.github.io/script-portfolio/detail.html?id=劇本代號`
+5. 單部劇本詳情頁會是 `https://你的帳號.github.io/script-portfolio/detail.html?id=劇本代號`；角色卡則是 `.../detail.html?type=char&id=角色代號`
 
 若希望網址根目錄就能打開，也可把檔案放在帳號同名的 `你的帳號.github.io` 專案裡。
 
