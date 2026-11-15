@@ -299,7 +299,7 @@ const WORKS = [
 【001】
 這位嘴巴還在零度，身體已經沸騰了。`,
     authorNote: "50個世界完全隨機開局，我也不知道你會抽到誰🤔",
-    screenshots: []  // 若要放試玩截圖，把圖檔放到 assets/screenshots/，再寫上檔名，例如 ["playtest-01.jpg"],
+    screenshots: [],  // 若要放試玩截圖，把圖檔放到 assets/screenshots/，再寫上檔名，例如 ["playtest-01.jpg"]
     chatLink: "https://web.lunly.app/community/5554d49498df"
   },
   {
@@ -317,7 +317,7 @@ const WORKS = [
     ],
     opening: "開場白（待補）",
     authorNote: "作者的話（待補）",
-    screenshots: []  // 若要放試玩截圖，把圖檔放到 assets/screenshots/，再寫上檔名，例如 ["playtest-01.jpg"],
+    screenshots: [],  // 若要放試玩截圖，把圖檔放到 assets/screenshots/，再寫上檔名，例如 ["playtest-01.jpg"]
     chatLink: "https://web.lunly.app/community/bf60a15a835f"
   },
   {
@@ -335,7 +335,7 @@ const WORKS = [
     ],
     opening: "開場白（待補）",
     authorNote: "作者的話（待補）",
-    screenshots: []  // 若要放試玩截圖，把圖檔放到 assets/screenshots/，再寫上檔名，例如 ["playtest-01.jpg"],
+    screenshots: [],  // 若要放試玩截圖，把圖檔放到 assets/screenshots/，再寫上檔名，例如 ["playtest-01.jpg"]
     chatLink: "https://web.lunly.app/community/d4b2d7962fd7"
   },
   {
@@ -353,7 +353,7 @@ const WORKS = [
     ],
     opening: "開場白（待補）",
     authorNote: "作者的話（待補）",
-    screenshots: []  // 若要放試玩截圖，把圖檔放到 assets/screenshots/，再寫上檔名，例如 ["playtest-01.jpg"],
+    screenshots: [],  // 若要放試玩截圖，把圖檔放到 assets/screenshots/，再寫上檔名，例如 ["playtest-01.jpg"]
     chatLink: "https://web.lunly.app/community/05b4148b4326"
   },
   {
@@ -371,7 +371,7 @@ const WORKS = [
     ],
     opening: "開場白（待補）",
     authorNote: "作者的話（待補）",
-    screenshots: []  // 若要放試玩截圖，把圖檔放到 assets/screenshots/，再寫上檔名，例如 ["playtest-01.jpg"],
+    screenshots: [],  // 若要放試玩截圖，把圖檔放到 assets/screenshots/，再寫上檔名，例如 ["playtest-01.jpg"]
     chatLink: "https://web.lunly.app/community/2dd9fb03b531"
   },
   {
@@ -389,8 +389,8 @@ const WORKS = [
     ],
     opening: "開場白（待補）",
     authorNote: "作者的話（待補）",
-    screenshots: []  // 若要放試玩截圖，把圖檔放到 assets/screenshots/，再寫上檔名，例如 ["playtest-01.jpg"],
-    chatLink: "https://https://web.lunly.app/community/1f7573f809f0"
+    screenshots: [],  // 若要放試玩截圖，把圖檔放到 assets/screenshots/，再寫上檔名，例如 ["playtest-01.jpg"]
+    chatLink: "https://web.lunly.app/community/1f7573f809f0"
   },
   {
     id: "nopl",
@@ -407,7 +407,7 @@ const WORKS = [
     ],
     opening: "開場白（待補）",
     authorNote: "作者的話（待補）",
-    screenshots: []  // 若要放試玩截圖，把圖檔放到 assets/screenshots/，再寫上檔名，例如 ["playtest-01.jpg"],
+    screenshots: [],  // 若要放試玩截圖，把圖檔放到 assets/screenshots/，再寫上檔名，例如 ["playtest-01.jpg"]
     chatLink: "https://web.lunly.app/community/af29edb241b4"
   },
   {
@@ -543,7 +543,7 @@ const WORKS = [
 
 沒有人催促。律謙等著尚未得到的回答。`,
     authorNote: "作者的話（待補）",
-    screenshots: []  // 若要放試玩截圖，把圖檔放到 assets/screenshots/，再寫上檔名，例如 ["playtest-01.jpg"],
+    screenshots: [],  // 若要放試玩截圖，把圖檔放到 assets/screenshots/，再寫上檔名，例如 ["playtest-01.jpg"]
     chatLink: "https://web.lunly.app/community/1c646a1eefef"
   },
   {
@@ -561,7 +561,7 @@ const WORKS = [
     ],
     opening: "開場白（待補）",
     authorNote: "BL的🚗🚗，香死了",
-    screenshots: []  // 若要放試玩截圖，把圖檔放到 assets/screenshots/，再寫上檔名，例如 ["playtest-01.jpg"],
+    screenshots: [],  // 若要放試玩截圖，把圖檔放到 assets/screenshots/，再寫上檔名，例如 ["playtest-01.jpg"]
     chatLink: "https://web.lunly.app/community/26d05324280d"
   },
   {
@@ -579,7 +579,7 @@ const WORKS = [
     ],
     opening: "開場白（待補）",
     authorNote: "作者的話（待補）",
-    screenshots: []  // 若要放試玩截圖，把圖檔放到 assets/screenshots/，再寫上檔名，例如 ["playtest-01.jpg"],
+    screenshots: [],  // 若要放試玩截圖，把圖檔放到 assets/screenshots/，再寫上檔名，例如 ["playtest-01.jpg"]
     chatLink: "https://web.lunly.app/community/a1c9035f78f7"
   },
   {
