@@ -120,7 +120,7 @@
       align-items: baseline;
       justify-content: space-between;
       gap: 16px;
-      padding: 56px 0 8px;
+      padding: 28px 0 8px;
     }
     .section-head h2 {
       font-family: "Noto Serif TC", serif;
@@ -138,7 +138,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      padding: 20px 0 8px;
+      padding: 24px 0 12px;
       position: sticky;
       top: 0;
       z-index: 5;
@@ -248,6 +248,8 @@
     .body { padding: 18px 18px 20px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
     .tags { display: flex; flex-wrap: wrap; gap: 6px; }
     .tag {
+      appearance: none;
+      font: inherit;
       font-size: 11px;
       letter-spacing: .04em;
       color: var(--gold-soft);
@@ -255,6 +257,19 @@
       padding: 2px 8px;
       border-radius: 999px;
       background: rgba(201,168,76,.06);
+      cursor: pointer;
+    }
+    .tag:hover, .tag.is-on, .tag:focus-visible {
+      border-color: var(--gold);
+      background: rgba(201,168,76,.14);
+      color: var(--gold-soft);
+      outline: none;
+    }
+    .empty-msg {
+      color: var(--muted);
+      font-size: 14px;
+      letter-spacing: .06em;
+      padding: 12px 0 40px;
     }
     .body h2, .body h3 {
       font-family: "Noto Serif TC", serif;
@@ -364,12 +379,13 @@
       </nav>
     </header>
 
+    <div class="toolbar" id="filters" aria-label="分類篩選"></div>
+
     <section id="scripts">
       <div class="section-head">
         <h2>劇本</h2>
         <div class="hint">點進卡片即可查看詳情頁</div>
       </div>
-      <div class="toolbar" id="filters" aria-label="分類篩選"></div>
       <div class="grid" id="grid" aria-label="劇本列表"></div>
     </section>
 
@@ -439,16 +455,58 @@ function escapeHTML(s) {
     .replace(/"/g, "&quot;");
 }
 
-function tagHTML(tags, withHash) {
-  return (tags || []).map(t => {
-    const label = withHash && !String(t).startsWith("#") ? "#" + t : t;
-    return `<span class="tag">${escapeHTML(label)}</span>`;
-  }).join("");
+const HIDDEN_TAGS = { "18禁": true };
+
+function visibleTags(tags) {
+  return (tags || []).filter(t => t && !HIDDEN_TAGS[t]);
 }
 
-function matchesFilter(w) {
+function collectFilterNames() {
+  const seen = new Set();
+  for (const item of [...(WORKS || []), ...(CHARACTERS || [])]) {
+    for (const t of visibleTags(item.tags)) seen.add(t);
+  }
+  const preferred = (FILTERS || []).filter(n => n && n !== "全部" && !HIDDEN_TAGS[n] && seen.has(n));
+  const names = ["全部", ...preferred];
+  if (current && current !== "全部" && !names.includes(current) && seen.has(current)) {
+    names.push(current);
+  }
+  return names;
+}
+
+function renderFilterChips() {
+  if (!filtersEl) return;
+  filtersEl.innerHTML = "";
+  collectFilterNames().forEach(name => {
+    const b = document.createElement("button");
+    b.className = "chip" + (name === current ? " is-on" : "");
+    b.type = "button";
+    b.dataset.filter = name;
+    b.textContent = name;
+    b.addEventListener("click", () => applyFilter(name));
+    filtersEl.appendChild(b);
+  });
+}
+
+function matchesFilter(item) {
   if (current === "全部") return true;
-  return (w.tags || []).includes(current);
+  return visibleTags(item.tags).includes(current);
+}
+
+function applyFilter(name) {
+  if (!name) return;
+  current = name;
+  renderFilterChips();
+  render();
+  renderCharacters();
+}
+
+function tagHTML(tags, withHash) {
+  return visibleTags(tags).map(t => {
+    const label = withHash && !String(t).startsWith("#") ? "#" + t : t;
+    const on = current === t ? " is-on" : "";
+    return `<button type="button" class="tag${on}" data-filter="${escapeHTML(t)}">${escapeHTML(label)}</button>`;
+  }).join("");
 }
 
 function displayCharTitle(c) {
@@ -459,8 +517,12 @@ function displayCharTitle(c) {
 }
 
 function render() {
-  grid.innerHTML = (WORKS || []).map((w, i) => {
-    if (!matchesFilter(w)) return "";
+  const list = (WORKS || []).map((w, i) => ({ w, i })).filter(({ w }) => matchesFilter(w));
+  if (!list.length) {
+    grid.innerHTML = `<p class="empty-msg">沒有符合的作品</p>`;
+    return;
+  }
+  grid.innerHTML = list.map(({ w, i }) => {
     const id = w.id || String(i + 1);
     return `
     <a class="card" href="detail.html?id=${encodeURIComponent(id)}" aria-label="查看《${escapeHTML(w.title)}》介紹">
@@ -476,7 +538,12 @@ function render() {
 }
 
 function renderCharacters() {
-  charGrid.innerHTML = (CHARACTERS || []).map((c, i) => {
+  const list = (CHARACTERS || []).map((c, i) => ({ c, i })).filter(({ c }) => matchesFilter(c));
+  if (!list.length) {
+    charGrid.innerHTML = `<p class="empty-msg">沒有符合的作品</p>`;
+    return;
+  }
+  charGrid.innerHTML = list.map(({ c, i }) => {
     const title = displayCharTitle(c);
     const sub = (c.subtitle && title.indexOf(c.subtitle) === -1) ? `<div class="subtitle">${escapeHTML(c.subtitle)}</div>` : "";
     const id = c.id || String(i + 1);
@@ -494,18 +561,17 @@ function renderCharacters() {
   }).join("");
 }
 
-(FILTERS || ["全部"]).forEach(name => {
-  const b = document.createElement("button");
-  b.className = "chip" + (name === "全部" ? " is-on" : "");
-  b.type = "button";
-  b.textContent = name;
-  b.addEventListener("click", () => {
-    current = name;
-    [...filtersEl.children].forEach(ch => ch.classList.toggle("is-on", ch.textContent === name));
-    render();
-  });
-  filtersEl.appendChild(b);
-});
+function onCardTagClick(e) {
+  const tag = e.target.closest("button.tag");
+  if (!tag) return;
+  e.preventDefault();
+  e.stopPropagation();
+  applyFilter(tag.dataset.filter);
+}
+grid.addEventListener("click", onCardTagClick, true);
+charGrid.addEventListener("click", onCardTagClick, true);
+
+renderFilterChips();
 
 if (countEl) countEl.textContent = String((WORKS || []).length);
 if (charCountEl) charCountEl.textContent = String((CHARACTERS || []).length);

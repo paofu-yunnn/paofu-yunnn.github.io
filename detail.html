@@ -121,11 +121,6 @@
       color: var(--gold-soft);
       background: rgba(201,168,76,.08);
     }
-    .badge.r18 {
-      color: #f0c9c9;
-      border-color: rgba(180,70,70,.45);
-      background: rgba(140,40,40,.28);
-    }
     .info h1 {
       font-family: "Noto Serif TC", serif;
       font-weight: 700;
@@ -513,12 +508,6 @@ function escapeHTML(s) {
     .replace(/"/g, "&quot;");
 }
 
-function isR18(w) {
-  if (w.r18 === true) return true;
-  if (w.r18 === false) return false;
-  return (w.tags || []).includes("18禁");
-}
-
 function hasText(s) { return String(s || "").trim().length > 0; }
 
 function params() { return new URLSearchParams(location.search); }
@@ -733,7 +722,6 @@ function renderWork(app, w) {
   document.querySelector(".topbar .back").setAttribute("href", "index.html#scripts");
 
   const badges = [];
-  if (isR18(w)) badges.push(`<span class="badge r18">R18</span>`);
   if (hasText(w.category)) badges.push(`<span class="badge">${escapeHTML(w.category)}</span>`);
   if (hasText(w.length)) badges.push(`<span class="badge">${escapeHTML(w.length)}</span>`);
 

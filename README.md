@@ -24,13 +24,13 @@
 3. 貼到 `WORKS` 陣列裡，通常放在最後一部的後面；若前面還有一部，記得在它的 `}` 後面加逗號
 4. 一定要寫不重複的 `id`（詳情頁網址會用到，例如 `detail.html?id=transferlove`）
 5. 改標題、版本、標籤、短介；有封面就把 `cover` 改成檔名，沒有就留 `""`
-6. 平台欄位可按需要填：`category`、`hashtags`、`length`、`playerRole`、`targetGender`、`artStyle`、`blurb`、`quote`、`r18`、`chatLink`
+6. 平台欄位可按需要填：`category`、`hashtags`、`length`、`playerRole`、`targetGender`、`artStyle`、`blurb`、`quote`、`chatLink`
 7. 詳情分頁可按需要填：`story`（故事介紹，可用 `##` / `###` 小標）、`leads`（角色介紹，可寫任何性別）、`opening`（開場白試閱）、`authorNote` 與 `screenshots`（作者的話）
 8. 「開始聊天」只要在 `chatLink` 填上網址就會出現按鈕；留空則不顯示
 9. 沒有內容的分頁會自動隱藏。若「作者的話」還沒寫、但想先露出分頁，可把 `authorTab` 設成 `true`
 10. 存檔後重新整理瀏覽器
 
-標籤裡若寫了「穿書、快穿、校園、獸人、奇幻、都會、18禁」其中一個，這部就會出現在首頁對應的分類按鈕。想加新分類，在 `scripts.js` 上方的 `FILTERS` 加一個詞，並在該部的 `tags` 裡也寫上。
+首頁中間有一列共用篩選，會同時篩選「劇本」與「角色卡」。標籤列會自動蒐集兩邊 `tags` 裡出現過的詞。想讓常用標籤排在前面，可改 `scripts.js` 上方的 `FILTERS`。點卡片上的標籤，也會套用同一個篩選。
 
 ## 自己刪除一部劇本
 
