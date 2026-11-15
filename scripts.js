@@ -207,7 +207,7 @@ const WORKS = [
 【結算】
 本回合無變動。
 ━━━━━━━━`,
-    authorNote: "作者的話（待補）",
+    authorNote: "柊司這個人太欠嗆了，皮夾的照片跟手上的錶真的讓人很氣🤬",
     screenshots: ["fengpi-playtest-01.PNG", "fengpi-playtest-02.PNG", "fengpi-playtest-03.PNG"]
   },
   {
