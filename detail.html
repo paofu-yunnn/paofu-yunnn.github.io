@@ -331,6 +331,22 @@
       letter-spacing: .12em;
       margin-bottom: 8px;
     }
+    .profile-imgs {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 14px;
+      margin: 22px 0 28px;
+    }
+    .profile-imgs figure {
+      margin: 0;
+      width: min(100%, 320px);
+      background: #0a0e16;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .profile-imgs img { width: 100%; height: auto; display: block; }
     .shots {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -628,7 +644,11 @@ function storyPanel(w) {
 
 function profilePanel(c) {
   const src = hasText(c.profile) ? c.profile : c.long;
-  return `<div class="prose">${renderRich(src)}</div>`;
+  const imgs = Array.isArray(c.profileImages) ? c.profileImages.filter(n => hasText(n)) : [];
+  const gallery = imgs.length
+    ? `<div class="profile-imgs">${imgs.map(n => `<figure><img src="${PORTRAIT_DIR}${encodeURI(n.trim())}" alt="${escapeHTML(displayCharTitle(c))}" loading="lazy"></figure>`).join("")}</div>`
+    : "";
+  return `<div class="prose">${renderRich(src)}</div>${gallery}`;
 }
 
 function leadsPanel(w) {

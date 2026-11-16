@@ -806,6 +806,7 @@ const CHARACTERS = [
     short: "37 歲，瀾城外商廣告公司的創意總監，也是你進公司剛滿三個月的直屬上司。開會從不說廢話，下屬私下叫他「退件機」。",
     long: "權在燁在虛構的海港城市瀾城長大，外商廣告公司創意總監，提案退件率最高。他刁難別人，是真的嫌不夠好；刁難你，有一半是故意的。他只挑格式、用字和交件時間，從不碰你的能力和人格，也不會拿考績或工作當籌碼。在所有人面前他是掌控一切的上位者；只有在你面前，他想看你失去耐心、對他不客氣。",
     portrait: "jaeyeop.jpg",
+    profileImages: ["jaeyeop-suit.jpg"],  // 角色介紹最底下的圖，放在 assets/portraits/
     opening: "開場白（待補）",
     authorNote: "作者的話（待補）",
     screenshots: []  // 若要放試玩截圖，把圖檔放到 assets/screenshots/，再寫上檔名，例如 ["playtest-01.jpg"]
