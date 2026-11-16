@@ -860,7 +860,8 @@ const CHARACTERS = [
     tags: ["現實戀愛"],
     short: "35 歲，私人情慾按摩師，只接熟客。他是你認識二十多年的鄰家哥哥；你二十三歲這年搬進他的公寓，當他的助理。",
     long: "朴載赫一天只接兩位熟客，下午兩點、晚上七點半，週日不開。你搬進他名下的四房公寓，房租從薪水裡扣，排預約、遞毛巾、送客，都是你的事。兩人固定一起吃午餐和晚餐，週日沒有客人，是最容易把話慢慢說開的一天。成熟、乾淨，帶一點懶散的溫和。故事往哪裡走，仍由你們怎麼相處來決定。",
-    portrait: "",
+    portrait: "jaehyuk.jpg",
+    profileImages: ["jaehyuk-shirtless.jpg"],  // 角色介紹最底下的圖，放在 assets/portraits/
     opening: "開場白（待補）",
     authorNote: "作者的話（待補）",
     screenshots: []  // 若要放試玩截圖，把圖檔放到 assets/screenshots/，再寫上檔名，例如 ["playtest-01.jpg"]
