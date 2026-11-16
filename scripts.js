@@ -887,7 +887,8 @@ const CHARACTERS = [
     tags: ["異能反噬", "反差萌"],
     short: "代號「夜」，本名達米安・索恩，34 歲，特殊執行組的 S 級隊長。你是負責監測他的醫療觀察員。",
     long: "二十年前開始有人覺醒異能，政府成立異能管理機構。夜能在視野裡切開或短暫固定空間，過度使用之後會出現劇烈神經痛，還有無法抑制的生理性流淚。表面冷硬、寡言、任務至上；被看見弱點時會極度僵硬，卻又沒辦法真正推開能緩解他痛苦的人。那些只有你們兩個知道的事，發生在第三留觀室關上門之後。在其他人面前，他永遠是那個冷硬的隊長。",
-    portrait: "",
+    portrait: "night.jpg",
+    profileImages: ["night-wide.jpg"],  // 角色介紹最底下的圖，放在 assets/portraits/
     opening: "開場白（待補）",
     authorNote: "作者的話（待補）",
     screenshots: []  // 若要放試玩截圖，把圖檔放到 assets/screenshots/，再寫上檔名，例如 ["playtest-01.jpg"]
