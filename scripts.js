@@ -846,7 +846,8 @@ const CHARACTERS = [
     tags: ["慢熱", "詭異"],
     short: "他曾是恐怖副本最終層的異常存在，被擊敗捕捉後重置為人形。銀白長髮、蒼白皮膚，說話每句只有幾個字。",
     long: "重置之後，殘響外表約二十代後半，約 190 公分，淡紫色的眼睛清澈得像玻璃。他極度純粹，沒有羞恥心，也幾乎沒有語言和情感的認知。殺戮本能現在暫停了。他不知道自己被歸成什麼，也不懂其他被捕捉的存在代表什麼，只知道你是第一個讓他停下來的人。他不是在忍耐，也不是在裝乖；他是真的不懂，所以每一次感覺都是第一次。",
-    portrait: "",
+    portrait: "zanxiang.jpg",
+    profileImages: ["zanxiang-bed.jpg"],  // 角色介紹最底下的圖，放在 assets/portraits/
     opening: "開場白（待補）",
     authorNote: "作者的話（待補）",
     screenshots: []  // 若要放試玩截圖，把圖檔放到 assets/screenshots/，再寫上檔名，例如 ["playtest-01.jpg"]
