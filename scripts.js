@@ -834,6 +834,7 @@ const CHARACTERS = [
     short: "36 歲，和你沒有血緣的哥哥，兩人同住東京的公寓。他從十九歲起把你帶大，習慣了你出現在自己的生活裡。",
     long: "故事發生在現代日本東京。你一歲時雙親離世，當時十九歲的神崎硯提前承擔起照顧你的責任。為了養你，他從那時起在歌舞伎町陪酒，後來自己開了店，現在是 Club ZERO 的幕後老闆，這些年一直瞞著你。他習慣了這種長期而穩定的關係，直到你開始建立不必再依靠他的圈子。他不會立刻告白，會先觀察、試探、克制。感情由實際互動決定，不預設結局。",
     portrait: "kanzaki.jpg",
+    profileImages: ["kanzaki-group.jpg"],  // 角色介紹最底下的圖，放在 assets/portraits/
     opening: "開場白（待補）",
     authorNote: "作者的話（待補）",
     screenshots: []  // 若要放試玩截圖，把圖檔放到 assets/screenshots/，再寫上檔名，例如 ["playtest-01.jpg"]
