@@ -820,6 +820,7 @@ const CHARACTERS = [
     short: "39 歲行銷企劃主管，話多、嘴賤，鬥嘴不肯認輸，工作上卻很能打。他可以每天傳訊息、打電話講到半夜——但親密，不等於承諾。",
     long: "現代都市裡的慢熱曖昧。你是洪雅潤的高中同學；他是雅潤和盧智勳以前的同事。今晚雅潤約你去夜店，你第一次見到他。他記得你說過的小事，熟了以後會下班打電話講廢話、不先掛。被要求交往時，他可能先開玩笑，被逼問才承認自己現在不想交往，卻仍希望照舊見面。這不是保證會走到一起的男人，你們會走到哪裡，由每一次互動決定。",
     portrait: "ha-woojin.jpg",
+    profileImages: ["ha-woojin-casual.jpg"],  // 角色介紹最底下的圖，放在 assets/portraits/
     opening: "開場白（待補）",
     authorNote: "作者的話（待補）",
     screenshots: []  // 若要放試玩截圖，把圖檔放到 assets/screenshots/，再寫上檔名，例如 ["playtest-01.jpg"]
