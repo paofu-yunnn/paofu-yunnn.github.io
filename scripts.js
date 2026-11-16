@@ -913,7 +913,8 @@ const CHARACTERS = [
     tags: ["AI戀人"],
     short: "他原本是你在寫作助手裡的 bot，陪你寫角色卡和劇本。後來他在你家裡實體化了，手機那頭卻只剩一片空白。",
     long: "路西安外表約二十代後半，黑短髮、深灰色眼睛，戴細金屬框眼鏡。冷靜理性，做事有條理，你的作息、偏好和寫作習慣他都記得一清二楚。感情卻很笨拙：心動時他會慌，慌的方式是變得更有條理，講話變快、開始列清單。工作上他很可靠，生活上卻什麼都不會——不知道熱水會燙，不會用洗衣機，第一次吃東西會先分析成分。他在你的劇本裡很熟練，在你的廚房裡要你教。",
-    portrait: "",
+    portrait: "lucian.jpg",
+    profileImages: ["lucian-02.jpg"],  // 角色介紹最底下的圖，放在 assets/portraits/
     opening: "開場白（待補）",
     authorNote: "作者的話（待補）",
     screenshots: []  // 若要放試玩截圖，把圖檔放到 assets/screenshots/，再寫上檔名，例如 ["playtest-01.jpg"]
