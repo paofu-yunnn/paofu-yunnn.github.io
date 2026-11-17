@@ -201,6 +201,7 @@
       font-size: 12px;
       letter-spacing: .08em;
     }
+    .version.date { margin-top: 4px; }
 
     .tabs {
       display: flex;
@@ -777,6 +778,7 @@ function renderWork(app, w) {
       <p class="author-line">作者　<b>${escapeHTML(author)}</b></p>
       ${chat}
       ${w.version ? `<div class="version">最新版 ${escapeHTML(w.version)}</div>` : ""}
+      ${hasText(w.date) ? `<div class="version date">完成日 ${escapeHTML(w.date)}</div>` : ""}
     </header>
     ${tabsAndPanels(w, WORK_TABS, tabEnabledWork, {
       story: storyPanel, leads: leadsPanel, opening: openingPanel, author: authorPanel
